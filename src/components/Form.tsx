@@ -1,5 +1,5 @@
 import {
- Box, Button, Checkbox, FormControlLabel, Grid, TextField, Typography 
+ Box, Button, Checkbox, FormControlLabel, Grid, Snackbar, TextField, Typography 
 } from '@mui/material';
 import React, { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
@@ -26,7 +26,7 @@ const Form: React.FC<FormProps> = ({ mode, textButton }) => {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const userExist = useAppSelector((state) => selectByEmail(state, email));
-  // const [newUser, setNewUser] = useState<UserType | null>(null);
+  /* const [open, setOpen] = useState(false); */
 
   useEffect(() => {
     if (mode === 'signup') {
@@ -62,11 +62,10 @@ const Form: React.FC<FormProps> = ({ mode, textButton }) => {
       // dar feedback pro usuário:
       if (userExist) {
         alert('Esse e-mail já está cadastrado!');
-        return null;
+        return;
       }
 
       dispatch(addUser(newUser));
-      // dispatch(setUser(newUser));
 
       setEmail('');
       setPassword('');
@@ -101,7 +100,7 @@ const Form: React.FC<FormProps> = ({ mode, textButton }) => {
       />
       <TextField
         error={errorPassword}
-        helperText={errorPassword ? 'A senha deve ter no mínimo 6 caractéres' : ''}
+        helperText={errorPassword ? 'A senha deve ter no mínimo 6 caracteres' : ''}
         value={password}
         onChange={(evento) => setPassword(evento.target.value)}
         margin="normal"
@@ -112,7 +111,6 @@ const Form: React.FC<FormProps> = ({ mode, textButton }) => {
         label="Password"
         fullWidth
       />
-
       {mode === 'signup' ? (
         <TextField
           error={errorRepassword}
@@ -133,10 +131,11 @@ const Form: React.FC<FormProps> = ({ mode, textButton }) => {
           label="Permanecer conectado"
         />
       )}
-
       <Button disabled={disabled} type="submit" variant="contained" fullWidth sx={{ mt: 3, mb: 2 }}>
         {textButton}
       </Button>
+
+      {/* <Snackbar open={open} autoHideDuration={6000} onClose={handleSnackbarClose} message="Seu feedback foi enviado!" /> */}
       <Grid container>
         {mode === 'signin' && (
           <Grid item xs={4}>

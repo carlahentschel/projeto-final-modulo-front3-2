@@ -19,53 +19,31 @@ import {
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import AddIcon from '@mui/icons-material/Add';
-
 import React, { useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import ResponsiveAppBar from '../components/ResponsiveAppBar';
 import { useAppDispatch, useAppSelector } from '../store/hooks';
 import TaskType from '../Types/TaskType';
-import { selectAll, setUser } from '../store/modules/UserSlice';
-
-const MockTasks: TaskType[] = [
-  {
-    id: '1',
-    task: 'Recado 1',
-    detail: 'Teste teste teste teste teste',
-    favorite: false,
-  },
-  {
-    id: '2',
-    task: 'Recado 2',
-    detail: 'Teste teste teste teste teste',
-    favorite: true,
-  },
-  {
-    id: '3',
-    task: 'Recado 3',
-    detail: 'Teste teste teste teste teste',
-    favorite: false,
-  },
-  {
-    id: '4',
-    task: 'Recado 4',
-    detail: 'Teste teste teste teste teste',
-    favorite: false,
-  },
-  {
-    id: '5',
-    task: 'Recado 5',
-    detail: 'Teste teste teste teste teste',
-    favorite: false,
-  },
-];
+import { addNewTask, deleteTask, toggleFavorite, updateTask } from '../store/modules/UserSlice';
+import { updateUser } from '../store/modules/UsersSlice';
 
 const Notes: React.FC = () => {
   const userLogged = useAppSelector((state) => state.user.user);
   const [open, setOpen] = React.useState(false);
-  const tasksRedux = useAppSelector(selectAll);
+  const [openEdit, setOpenEdit] = React.useState(false);
+
+  const [task, setTask] = React.useState({} as TaskType);
+  const dispatch = useAppDispatch();
+  const navigate = useNavigate();
 
   useEffect(() => {
-    console.log(userLogged);
+    if (!userLogged) {
+      navigate('/');
+    }
+  }, []);
+
+  useEffect(() => {
+    dispatch(updateUser({ id: userLogged.email, changes: userLogged }));
   }, [userLogged]);
 
   const handleClickOpen = () => {
@@ -74,6 +52,41 @@ const Notes: React.FC = () => {
 
   const handleClose = () => {
     setOpen(false);
+  };
+
+  const handleSave = () => {
+    dispatch(
+      addNewTask({
+        ...task,
+        favorite: false,
+        id: `${Date.now()}`,
+      }),
+    );
+
+    setOpen(false);
+  };
+
+  const handleFavorite = (item: TaskType) => {
+    dispatch(toggleFavorite(item.id));
+  };
+
+  const handleEdit = (item: TaskType) => {
+    console.log(item);
+    setOpenEdit(true);
+    setTask(item);
+  };
+
+  const handleDelete = (item: TaskType) => {
+    dispatch(deleteTask(item.id));
+  };
+
+  const handleCloseEdit = () => {
+    setOpenEdit(false);
+  };
+
+  const handleSaveEdit = () => {
+    dispatch(updateTask(task));
+    handleCloseEdit();
   };
 
   return (
@@ -89,7 +102,7 @@ const Notes: React.FC = () => {
             <Divider />
             <Grid container gap={3} marginTop={3}>
               {userLogged.tasks.map((item) => (
-                <Grid key={item.id} item xs={12} sm={6} md={4} lg={3}>
+                <Grid key={item.id} item xs={12} sm={6} md={3}>
                   <Card sx={{ maxWidth: 350 }}>
                     <CardContent>
                       <Typography gutterBottom variant="h5" component="div">
@@ -101,19 +114,19 @@ const Notes: React.FC = () => {
                     </CardContent>
                     <CardActions>
                       {item.favorite ? (
-                        <IconButton>
+                        <IconButton onClick={() => handleFavorite(item)} color="error">
                           <Favorite />
                         </IconButton>
                       ) : (
-                        <IconButton>
+                        <IconButton onClick={() => handleFavorite(item)} color="inherit">
                           <FavoriteBorder />
                         </IconButton>
                       )}
 
-                      <IconButton color="success">
+                      <IconButton onClick={() => handleEdit(item)} color="success">
                         <EditIcon />
                       </IconButton>
-                      <IconButton color="warning">
+                      <IconButton onClick={() => handleDelete(item)} color="warning">
                         <DeleteIcon />
                       </IconButton>
                     </CardActions>
@@ -136,7 +149,16 @@ const Notes: React.FC = () => {
       <Dialog open={open} onClose={handleClose}>
         <DialogTitle>Criar um novo recado:</DialogTitle>
         <DialogContent>
-          <TextField autoFocus margin="dense" id="task" label="Tarefa" type="text" fullWidth variant="standard" />
+          <TextField
+            autoFocus
+            margin="dense"
+            id="task"
+            label="Tarefa"
+            type="text"
+            fullWidth
+            variant="standard"
+            onChange={(e) => setTask((state) => ({ ...state, task: e.target.value }))}
+          />
           <TextField
             autoFocus
             margin="dense"
@@ -145,11 +167,43 @@ const Notes: React.FC = () => {
             type="text"
             fullWidth
             variant="standard"
+            onChange={(e) => setTask((state) => ({ ...state, detail: e.target.value }))}
           />
         </DialogContent>
         <DialogActions>
           <Button onClick={handleClose}>Cancelar</Button>
-          <Button onClick={handleClose}>Salvar</Button>
+          <Button onClick={handleSave}>Salvar</Button>
+        </DialogActions>
+      </Dialog>
+      <Dialog open={openEdit} onClose={handleClose}>
+        <DialogTitle>Editar um recado:</DialogTitle>
+        <DialogContent>
+          <TextField
+            autoFocus
+            value={task.task}
+            margin="dense"
+            id="task"
+            label="Tarefa"
+            type="text"
+            fullWidth
+            variant="standard"
+            onChange={(e) => setTask((state) => ({ ...state, task: e.target.value }))}
+          />
+          <TextField
+            autoFocus
+            value={task.detail}
+            margin="dense"
+            id="detail"
+            label="Detalhamento"
+            type="text"
+            fullWidth
+            variant="standard"
+            onChange={(e) => setTask((state) => ({ ...state, detail: e.target.value }))}
+          />
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleCloseEdit}>Cancelar</Button>
+          <Button onClick={handleSaveEdit}>Salvar</Button>
         </DialogActions>
       </Dialog>
     </>

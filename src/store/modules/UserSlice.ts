@@ -1,18 +1,14 @@
-import { createEntityAdapter, createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 import UserType from '../../Types/UserType';
 import TaskType from '../../Types/TaskType';
-import { RootState } from '..';
-/* import type { RootState } from '../index'; */
 
 interface UserState {
   user: UserType;
 }
 
-const adapter = createEntityAdapter<TaskType>({ selectId: (task) => task.id });
-
-const initialState = {
-  user: { email: '', password: '', tasks: adapter.getInitialState() },
+const initialState: UserState = {
+  user: { email: '', password: '', tasks: [] },
 };
 
 export const UserSlice = createSlice({
@@ -24,19 +20,33 @@ export const UserSlice = createSlice({
     },
     toggleFavorite: (state, action: PayloadAction<string>) => {
       const id = action.payload;
-      const { user } = state;
-      const index = state.user.tasks.findIndex((item) => item.id === id);
-      user.tasks[index].favorite = !user.tasks[index].favorite;
 
-      return { user };
+      const index = state.user.tasks.findIndex((item) => item.id === id);
+      state.user.tasks[index].favorite = !state.user.tasks[index].favorite;
     },
     logout: () => {
       return initialState;
     },
+    addNewTask: (state, action: PayloadAction<TaskType>) => {
+      state.user.tasks.push(action.payload);
+    },
+    updateTask: (state, action: PayloadAction<TaskType>) => {
+      const task = action.payload;
+      const index = state.user.tasks.findIndex((item) => item.id === task.id);
+
+      state.user.tasks[index] = task;
+    },
+    deleteTask: (state, action: PayloadAction<string>) => {
+      const id = action.payload;
+      const index = state.user.tasks.findIndex((item) => item.id === id);
+
+      state.user.tasks.splice(index, 1);
+    },
   },
 });
 
-export const { setUser, toggleFavorite, logout } = UserSlice.actions;
+export const {
+ setUser, logout, toggleFavorite, addNewTask, updateTask, deleteTask 
+} = UserSlice.actions;
 
-export const { selectById, selectAll } = adapter.getSelectors((state: RootState) => state.user.user.tasks);
 export default UserSlice.reducer;

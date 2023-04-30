@@ -2,9 +2,9 @@ import { VerifiedUser } from '@mui/icons-material';
 import { Box, Grid } from '@mui/material';
 import { green } from '@mui/material/colors';
 import React from 'react';
-
 import Form from '../components/Form';
 import HeaderForm from '../components/HeaderForm';
+import background from '../assets/images/notes.jpg';
 
 const SignUp: React.FC = () => {
   return (
@@ -15,7 +15,7 @@ const SignUp: React.FC = () => {
         sm={4}
         md={7}
         sx={{
-          backgroundImage: 'url(https://source.unsplash.com/random)',
+          backgroundImage: `url(${background})`,
           backgroundPosition: 'center',
           backgroundSize: 'cover',
           backgroundRepeat: 'no-repeat',
