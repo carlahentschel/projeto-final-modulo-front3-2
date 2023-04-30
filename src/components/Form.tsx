@@ -26,7 +26,6 @@ const Form: React.FC<FormProps> = ({ mode, textButton }) => {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const userExist = useAppSelector((state) => selectByEmail(state, email));
-  /* const [open, setOpen] = useState(false); */
 
   useEffect(() => {
     if (mode === 'signup') {
@@ -59,25 +58,22 @@ const Form: React.FC<FormProps> = ({ mode, textButton }) => {
         tasks: [],
       };
 
-      // dar feedback pro usuário:
       if (userExist) {
         alert('Esse e-mail já está cadastrado!');
         return;
       }
 
       dispatch(addUser(newUser));
-
       setEmail('');
       setPassword('');
       setRepassword('');
-
       navigate('/');
     } else {
       if (!userExist) {
-        alert('E-mail ou senha inválidos. Tente novamente!'); // dar feedback pro usuário:
+        alert('E-mail ou senha inválidos. Tente novamente!');
         return;
       }
-      // o que fazer com o "permanecer conectado"?
+
       dispatch(setUser(userExist));
       navigate('/notes');
     }
@@ -135,7 +131,6 @@ const Form: React.FC<FormProps> = ({ mode, textButton }) => {
         {textButton}
       </Button>
 
-      {/* <Snackbar open={open} autoHideDuration={6000} onClose={handleSnackbarClose} message="Seu feedback foi enviado!" /> */}
       <Grid container>
         {mode === 'signin' && (
           <Grid item xs={4}>

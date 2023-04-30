@@ -26,15 +26,17 @@ import { useAppDispatch, useAppSelector } from '../store/hooks';
 import TaskType from '../Types/TaskType';
 import { addNewTask, deleteTask, toggleFavorite, updateTask } from '../store/modules/UserSlice';
 import { updateUser } from '../store/modules/UsersSlice';
+import FeedbackTasks from '../components/FeedbackTasks';
 
 const Notes: React.FC = () => {
   const userLogged = useAppSelector((state) => state.user.user);
-  const [open, setOpen] = React.useState(false);
-  const [openEdit, setOpenEdit] = React.useState(false);
-
   const [task, setTask] = React.useState({} as TaskType);
+
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
+
+  const [open, setOpen] = React.useState(false);
+  const [openEdit, setOpenEdit] = React.useState(false);
 
   useEffect(() => {
     if (!userLogged) {
@@ -71,7 +73,6 @@ const Notes: React.FC = () => {
   };
 
   const handleEdit = (item: TaskType) => {
-    console.log(item);
     setOpenEdit(true);
     setTask(item);
   };
@@ -100,10 +101,10 @@ const Notes: React.FC = () => {
           <Container sx={{ marginTop: '20px' }}>
             <Typography variant="h4">Meus recados:</Typography>
             <Divider />
-            <Grid container gap={3} marginTop={3}>
+            <Grid container gap={2} marginTop={3}>
               {userLogged.tasks.map((item) => (
                 <Grid key={item.id} item xs={12} sm={6} md={3}>
-                  <Card sx={{ maxWidth: 350 }}>
+                  <Card sx={{ maxWidth: 380 }}>
                     <CardContent>
                       <Typography gutterBottom variant="h5" component="div">
                         {item.task}
@@ -122,7 +123,6 @@ const Notes: React.FC = () => {
                           <FavoriteBorder />
                         </IconButton>
                       )}
-
                       <IconButton onClick={() => handleEdit(item)} color="success">
                         <EditIcon />
                       </IconButton>
@@ -203,7 +203,7 @@ const Notes: React.FC = () => {
         </DialogContent>
         <DialogActions>
           <Button onClick={handleCloseEdit}>Cancelar</Button>
-          <Button onClick={handleSaveEdit}>Salvar</Button>
+          <Button onClick={handleSaveEdit}>Editar</Button>
         </DialogActions>
       </Dialog>
     </>
