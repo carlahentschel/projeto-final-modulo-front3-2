@@ -22,6 +22,7 @@ export const UserSlice = createSlice({
       const id = action.payload;
 
       const index = state.user.tasks.findIndex((item) => item.id === id);
+      // eslint-disable-next-line no-param-reassign
       state.user.tasks[index].favorite = !state.user.tasks[index].favorite;
     },
     logout: () => {
@@ -34,6 +35,7 @@ export const UserSlice = createSlice({
       const task = action.payload;
       const index = state.user.tasks.findIndex((item) => item.id === task.id);
 
+      // eslint-disable-next-line no-param-reassign
       state.user.tasks[index] = task;
     },
     deleteTask: (state, action: PayloadAction<string>) => {
@@ -45,8 +47,9 @@ export const UserSlice = createSlice({
   },
 });
 
+// eslint-disable-next-line max-len, prettier/prettier
 export const {
- setUser, logout, toggleFavorite, addNewTask, updateTask, deleteTask 
+  setUser, logout, toggleFavorite, addNewTask, updateTask, deleteTask,
 } = UserSlice.actions;
 
 export default UserSlice.reducer;

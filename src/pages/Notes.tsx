@@ -24,7 +24,10 @@ import { useNavigate } from 'react-router-dom';
 import ResponsiveAppBar from '../components/ResponsiveAppBar';
 import { useAppDispatch, useAppSelector } from '../store/hooks';
 import TaskType from '../Types/TaskType';
-import { addNewTask, deleteTask, toggleFavorite, updateTask } from '../store/modules/UserSlice';
+// eslint-disable-next-line prettier/prettier
+import {
+  addNewTask, deleteTask, toggleFavorite, updateTask,
+} from '../store/modules/UserSlice';
 import { updateUser } from '../store/modules/UsersSlice';
 
 const Notes: React.FC = () => {
