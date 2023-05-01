@@ -24,9 +24,10 @@ import { useNavigate } from 'react-router-dom';
 import ResponsiveAppBar from '../components/ResponsiveAppBar';
 import { useAppDispatch, useAppSelector } from '../store/hooks';
 import TaskType from '../Types/TaskType';
-import { addNewTask, deleteTask, toggleFavorite, updateTask } from '../store/modules/UserSlice';
+import {
+ addNewTask, deleteTask, toggleFavorite, updateTask 
+} from '../store/modules/UserSlice';
 import { updateUser } from '../store/modules/UsersSlice';
-import FeedbackTasks from '../components/FeedbackTasks';
 
 const Notes: React.FC = () => {
   const userLogged = useAppSelector((state) => state.user.user);
@@ -62,7 +63,7 @@ const Notes: React.FC = () => {
         ...task,
         favorite: false,
         id: `${Date.now()}`,
-      }),
+      })
     );
 
     setOpen(false);
@@ -137,13 +138,7 @@ const Notes: React.FC = () => {
           </Container>
         </Grid>
       </Grid>
-      <Fab
-        color="primary"
-        aria-label="add"
-        size="small"
-        sx={{ position: 'fixed', right: '20px', bottom: '20px' }}
-        onClick={handleClickOpen}
-      >
+      <Fab color="primary" aria-label="add" size="small" sx={{ position: 'fixed', right: '20px', bottom: '20px' }} onClick={handleClickOpen}>
         <AddIcon />
       </Fab>
       <Dialog open={open} onClose={handleClose}>
