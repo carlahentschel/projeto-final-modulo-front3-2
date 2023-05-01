@@ -15,6 +15,10 @@
   "plugins": ["react", "@typescript-eslint", "prettier"],
   "rules": {
     "prettier/prettier": "error",
+    "object-curly-newline": "off",
+    "no-unused-vars": "off",
+    "max-len": "off",
+    "no-alert": "off",
     "arrow-body-style": "off",
     "react/no-unused-prop-types": "off",
     "react/react-in-jsx-scope": "off",
