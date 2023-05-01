@@ -24,9 +24,7 @@ import { useNavigate } from 'react-router-dom';
 import ResponsiveAppBar from '../components/ResponsiveAppBar';
 import { useAppDispatch, useAppSelector } from '../store/hooks';
 import TaskType from '../Types/TaskType';
-import {
- addNewTask, deleteTask, toggleFavorite, updateTask 
-} from '../store/modules/UserSlice';
+import { addNewTask, deleteTask, toggleFavorite, updateTask } from '../store/modules/UserSlice';
 import { updateUser } from '../store/modules/UsersSlice';
 
 const Notes: React.FC = () => {
@@ -63,7 +61,7 @@ const Notes: React.FC = () => {
         ...task,
         favorite: false,
         id: `${Date.now()}`,
-      })
+      }),
     );
 
     setOpen(false);
@@ -97,7 +95,6 @@ const Notes: React.FC = () => {
         <Grid item xs={12}>
           <ResponsiveAppBar usuarioLogadoEmail={`Olá, ${userLogged.email}!`} />
         </Grid>
-
         <Grid item xs={12}>
           <Container sx={{ marginTop: '20px' }}>
             <Typography variant="h4">Meus recados:</Typography>
@@ -138,7 +135,13 @@ const Notes: React.FC = () => {
           </Container>
         </Grid>
       </Grid>
-      <Fab color="primary" aria-label="add" size="small" sx={{ position: 'fixed', right: '20px', bottom: '20px' }} onClick={handleClickOpen}>
+      <Fab
+        color="primary"
+        aria-label="add"
+        size="small"
+        sx={{ position: 'fixed', right: '20px', bottom: '20px' }}
+        onClick={handleClickOpen}
+      >
         <AddIcon />
       </Fab>
       <Dialog open={open} onClose={handleClose}>
